@@ -95,8 +95,9 @@
 
         let socket;
 
-        function setStatus(status, color, text) {
-            statusDiv.innerHTML = `<span class="${color} text-white px-3 py-1 rounded-full">${text}</span>`;
+        // --- FIX: Simplified the function signature ---
+        function setStatus(text, colorClass) {
+            statusDiv.innerHTML = `<span class="${colorClass} text-white px-3 py-1 rounded-full">${text}</span>`;
         }
 
         function connect() {
@@ -104,14 +105,16 @@
             socket = new WebSocket(url);
 
             socket.onopen = (event) => {
-                setStatus('bg-green-600', 'CONNECTED');
+                // --- FIX: Correctly call setStatus ---
+                setStatus('CONNECTED', 'bg-green-600');
                 logMessage('Socket connected successfully!', 'text-green-400');
                 connectBtn.classList.add('hidden');
                 disconnectBtn.classList.remove('hidden');
             };
 
             socket.onclose = (event) => {
-                setStatus('bg-gray-600', 'DISCONNECTED');
+                // --- FIX: Correctly call setStatus ---
+                setStatus('DISCONNECTED', 'bg-gray-600');
                 logMessage(`Socket closed: ${event.reason || 'No reason given'} (Code: ${event.code})`, 'text-yellow-400');
                 connectBtn.classList.remove('hidden');
                 disconnectBtn.classList.add('hidden');
@@ -119,7 +122,8 @@
             };
 
             socket.onerror = (event) => {
-                setStatus('bg-red-600', 'ERROR');
+                // --- FIX: Correctly call setStatus ---
+                setStatus('ERROR', 'bg-red-600');
                 logMessage('A WebSocket error occurred.', 'text-red-400');
                 console.error("WebSocket Error:", event);
             };
@@ -128,7 +132,8 @@
                 logMessage(event.data, 'text-cyan-300', true);
             };
 
-            setStatus('bg-yellow-600', 'CONNECTING...');
+            // --- FIX: Correctly call setStatus ---
+            setStatus('CONNECTING...', 'bg-yellow-600');
         }
         
         function disconnect() {
@@ -189,6 +194,9 @@
         clearLogBtn.addEventListener('click', () => {
             logDiv.innerHTML = '';
         });
+
+        // Set initial status
+        setStatus('DISCONNECTED', 'bg-gray-600');
     </script>
 </body>
 </html>
